@@ -40,4 +40,8 @@ public class Product {
     public Optional<Promotion> getPromotion() {
         return this.promotion;
     }
+
+    public boolean isPromotionProduct(){
+        return this.promotion.isPresent();
+    }
 }

@@ -1,7 +1,9 @@
 package store.controller;
 
 import store.domain.ConvenienceStore;
+import store.domain.PurchaseInformation;
 import store.dto.ProductStock;
+import store.dto.PromotionAvailableResponse;
 import store.dto.PurchaseRequest;
 import store.service.ConvenienceStoreService;
 import store.view.InputView;
@@ -27,33 +29,33 @@ public class ConvenienceStoreController {
 
     public void run(){
         ConvenienceStore convenienceStore = initializeConvenienceStore();
-
-        ProductStock stock = convenienceStore.getStock();
-        outputView.showStock(stock);
-        purchase(convenienceStore);
-
+        while (true){
+            ProductStock stock = convenienceStore.getStock();
+            outputView.showStock(stock);
+            List<PurchaseInformation> purchaseInformations = getPurchaseInformation(convenienceStore);
+            purchase(convenienceStore, purchaseInformations);
+        }
 
     }
 
     //출력부를 다 분리해서 작업하고 메서드를 재귀로 처리하는 것고 고려해야할 듯.
-    public void purchase(ConvenienceStore convenienceStore){
-        List<PurchaseRequest> purchaseRequests;
+    public void purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations){
+        purchaseConfirmed(purchaseInformations);
+
+
+    }
+
+    private List<PurchaseInformation> getPurchaseInformation(ConvenienceStore convenienceStore){
+        outputView.printPurchaseStartMessage();
         while (true){
             try {
-                purchaseRequests = inputView.purchase();
-                purchaseRequests.forEach(i-> System.out.println(i.toString()));
-                purchaseRequests.forEach(purchaseRequest -> isPossibleAmount(purchaseRequest, convenienceStore));
-                break;
+                List<PurchaseRequest> purchaseRequests = inputView.purchase();
+                return purchaseRequests.stream()
+                        .map(purchaseRequest -> mapPurchaseInformation(purchaseRequest, convenienceStore)).toList();
             }catch (IllegalArgumentException ignored){
             }
         }
-        System.out.println("end");
-        convenienceStoreService.isPromotion
-
-
-        convenienceStoreService.purchase(purchaseRequests, convenienceStore);
     }
-
 
 
     private ConvenienceStore initializeConvenienceStore(){
