@@ -63,4 +63,37 @@ public class ConvenienceStoreController {
             throw new IllegalArgumentException(INITIALIZE_FROM_FILE_ERROR.getMessage());
         }
     }
+
+    private PurchaseInformation mapPurchaseInformation(PurchaseRequest purchaseRequest, ConvenienceStore convenienceStore){
+        return convenienceStoreService.mapPurchaseInformation(purchaseRequest, convenienceStore);
+    }
+
+    private void purchaseConfirmed(List<PurchaseInformation> purchaseInformations){
+        purchaseInformations.forEach(this::announcePromotion);
+        purchaseInformations.forEach(this::checkPromotionApply);
+    }
+
+    /**
+     * ConvenienceStoreService 가 View 에 의존성을 갖지 않도록 하기 위해 Controller 에서 처리.
+     */
+    private void checkPromotionApply (PurchaseInformation purchaseInformation){
+        PromotionAvailableResponse response = convenienceStoreService.isPromotionAvailable(purchaseInformation);
+        if(!response.isAvailable()){
+            int retailPriceProduct = response.getUnavailablePromotionCount();
+            outputView.printUnExpectedPromotion(purchaseInformation.getProductName(), response.getUnavailablePromotionCount());
+            if(inputView.readYesOrNo()){
+                return ;
+            }
+            purchaseInformation.subtractRetailPriceProduct(retailPriceProduct);
+        }
+    }
+
+    private void announcePromotion(PurchaseInformation purchaseInformation){
+        if(convenienceStoreService.isOmitPromotionBonus(purchaseInformation)){
+            outputView.printAvailablePromotionBonus(purchaseInformation.getProductName());
+            if(inputView.readYesOrNo()){
+                purchaseInformation.increaseQuantity();
+            }
+        }
+    }
 }
