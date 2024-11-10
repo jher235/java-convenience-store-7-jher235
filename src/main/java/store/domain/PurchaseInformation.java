@@ -1,6 +1,5 @@
 package store.domain;
 
-import store.dto.PromotionAvailableResponse;
 import store.dto.PurchaseRequest;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class PurchaseInformation {
         return promotion;
     }
 
-    public boolean isPromotionInvalid(){
+    public boolean isPromotionValid(){
         if(promotion.isPresent() && promotionProduct.isPresent()){
             Promotion thisPromotion = promotion.get();
             if(thisPromotion.isPromotionPeriod()){

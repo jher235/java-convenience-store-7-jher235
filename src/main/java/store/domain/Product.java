@@ -1,5 +1,8 @@
 package store.domain;
 
+import store.exception.ErrorMessage;
+import store.exception.ExceptionHandler;
+
 import java.util.Optional;
 
 public class Product {
@@ -43,5 +46,19 @@ public class Product {
 
     public boolean isPromotionProduct(){
         return this.promotion.isPresent();
+    }
+
+    public void subtractQuantity(int quantity){
+        if(this.quantity >= quantity){
+            this.quantity -= quantity;
+            return;
+        }
+        ExceptionHandler.inputException(ErrorMessage.OUT_OF_STOCK);
+    }
+
+    public int popAllQuantity(){
+        int productQuantity = this.quantity;
+        this.quantity = 0;
+        return productQuantity;
     }
 }
