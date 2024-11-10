@@ -37,8 +37,20 @@ public class ConvenienceStoreController {
 
     //출력부를 다 분리해서 작업하고 메서드를 재귀로 처리하는 것고 고려해야할 듯.
     public void purchase(ConvenienceStore convenienceStore){
-        List<PurchaseRequest> purchaseRequests = inputView.purchase();
-        purchaseRequests.forEach(i-> System.out.println(i.toString()));
+        List<PurchaseRequest> purchaseRequests;
+        while (true){
+            try {
+                purchaseRequests = inputView.purchase();
+                purchaseRequests.forEach(i-> System.out.println(i.toString()));
+                purchaseRequests.forEach(purchaseRequest -> isPossibleAmount(purchaseRequest, convenienceStore));
+                break;
+            }catch (IllegalArgumentException ignored){
+            }
+        }
+        System.out.println("end");
+        convenienceStoreService.isPromotion
+
+
         convenienceStoreService.purchase(purchaseRequests, convenienceStore);
     }
 
