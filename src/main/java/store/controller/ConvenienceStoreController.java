@@ -41,8 +41,13 @@ public class ConvenienceStoreController {
     //출력부를 다 분리해서 작업하고 메서드를 재귀로 처리하는 것고 고려해야할 듯.
     public void purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations){
         purchaseConfirmed(purchaseInformations);
+        boolean applyMembership = isMembershipApplied();
 
+    }
 
+    private boolean isMembershipApplied(){
+        outputView.printAskingMembership();
+        return inputView.readYesOrNo();
     }
 
     private List<PurchaseInformation> getPurchaseInformation(ConvenienceStore convenienceStore){
