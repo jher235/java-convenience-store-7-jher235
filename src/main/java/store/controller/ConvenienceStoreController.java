@@ -38,12 +38,10 @@ public class ConvenienceStoreController {
 
     }
 
-    //출력부를 다 분리해서 작업하고 메서드를 재귀로 처리하는 것고 고려해야할 듯.
-    public void purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations){
-        purchaseConfirmed(purchaseInformations);
+    public PurchaseResult purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations){
+        purchaseInformations = purchaseConfirmed(purchaseInformations);
         boolean membershipApplied = isMembershipApplied();
-        convenienceStoreService.purchase(convenienceStore, purchaseInformations, membershipApplied);
-
+        return convenienceStoreService.purchase(convenienceStore, purchaseInformations, membershipApplied);
     }
 
     private boolean isMembershipApplied(){
@@ -76,9 +74,12 @@ public class ConvenienceStoreController {
         return convenienceStoreService.mapPurchaseInformation(purchaseRequest, convenienceStore);
     }
 
-    private void purchaseConfirmed(List<PurchaseInformation> purchaseInformations){
+    private List<PurchaseInformation> purchaseConfirmed(List<PurchaseInformation> purchaseInformations){
         purchaseInformations.forEach(this::announcePromotion);
         purchaseInformations.forEach(this::checkPromotionApply);
+        return purchaseInformations.stream()
+                .filter(PurchaseInformation::isValidQuantity)
+                .toList();
     }
 
     /**
