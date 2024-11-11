@@ -65,4 +65,20 @@ class ApplicationTest extends NsTest {
     public void runMain() {
         Application.main(new String[]{});
     }
+
+    @Test
+    void 프로모션_재고_부족_시_안내_메세지() {
+        assertSimpleTest(() -> {
+            run("[감자칩-10]","N","N","N");
+            assertThat((output().replaceAll("\\s","")).contains("감자칩6개는프로모션할인이적용되지않습니다"));
+        });
+    }
+
+    @Test
+    void 멤버십_할인_한도() {
+        assertSimpleTest(() -> {
+            run("[물-5],[에너지바-5],[정식도시락-8],[콜라-20],[사이다-15]","Y","Y","Y","N");
+            assertThat((output().replaceAll("\\s","")).contains("멤버십할인-8000"));
+        });
+    }
 }
