@@ -5,6 +5,7 @@ import store.domain.PurchaseInformation;
 import store.dto.ProductStock;
 import store.dto.PromotionAvailableResponse;
 import store.dto.PurchaseRequest;
+import store.dto.PurchaseResult;
 import store.service.ConvenienceStoreService;
 import store.view.InputView;
 import store.view.OutputView;
@@ -33,7 +34,8 @@ public class ConvenienceStoreController {
             ProductStock stock = convenienceStore.getStock();
             outputView.showStock(stock);
             List<PurchaseInformation> purchaseInformations = getPurchaseInformation(convenienceStore);
-            purchase(convenienceStore, purchaseInformations);
+            PurchaseResult purchaseResult = purchase(convenienceStore, purchaseInformations);
+            outputView.printReceipt(purchaseResult);
         }
 
     }

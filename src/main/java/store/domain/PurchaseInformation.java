@@ -12,7 +12,7 @@ public class PurchaseInformation {
     private int requestQuantity;
     private Optional<Promotion> promotion;
 
-    public PurchaseInformation(List<Product> products, PurchaseRequest purchaseRequest){
+    public PurchaseInformation(List<Product> products, PurchaseRequest purchaseRequest) {
         promotionProduct = products.stream()
                 .filter(Product::isPromotionProduct)
                 .findFirst();
@@ -24,7 +24,6 @@ public class PurchaseInformation {
         requestQuantity = purchaseRequest.getQuantity();
         initializePromotion();
     }
-
 
     public Product getProduct() {
         return product;
@@ -42,33 +41,39 @@ public class PurchaseInformation {
         return requestQuantity;
     }
 
-    public Optional<Promotion> getPromotion(){
+    public Optional<Promotion> getPromotion() {
         return promotion;
     }
 
-    public boolean isPromotionValid(){
-        if(promotion.isPresent() && promotionProduct.isPresent()){
+    public boolean isPromotionValid() {
+        if (promotion.isPresent() && promotionProduct.isPresent()) {
             Promotion thisPromotion = promotion.get();
-            if(thisPromotion.isPromotionPeriod()){
+            if (thisPromotion.isPromotionPeriod()) {
                 return true;
             }
         }
         return false;
     }
 
-    public void increaseQuantity(){
+    public void increaseQuantity() {
         this.requestQuantity++;
     }
 
-    public void subtractRetailPriceProduct(int retailPriceProduct){
+    public void subtractRetailPriceProduct(int retailPriceProduct) {
         this.requestQuantity -= retailPriceProduct;
     }
 
-    private void initializePromotion(){
-        if(promotionProduct.isPresent()){
+    public boolean isValidQuantity() {
+        return requestQuantity > 0;
+    }
+
+    private void initializePromotion() {
+        if (promotionProduct.isPresent()) {
             Product product = promotionProduct.get();
             this.promotion = Optional.of(product.getPromotion().get());
+            return;
         }
+        this.promotion = Optional.empty();
     }
 
 }

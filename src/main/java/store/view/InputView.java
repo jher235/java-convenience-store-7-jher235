@@ -21,8 +21,9 @@ public class InputView {
     public List<PurchaseRequest> purchase() {
         try {
             String input = readLine();
-            String[] purchaseInformation = input.split(DELIMITER);
-            List<String> purchaseInformationList = Arrays.asList(purchaseInformation);
+            List<String> purchaseInformationList = Arrays.stream(input.split(DELIMITER))
+                    .map(String::trim)
+                    .toList();
 
             Pattern pattern = Pattern.compile(PURCHASE_PATTERN);
             return parsePurchaseRequest(purchaseInformationList, pattern);

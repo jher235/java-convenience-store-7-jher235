@@ -20,4 +20,16 @@ public class PurchaseResponse {
         return new PurchaseResponse(purchaseInformation.getProductName(),
                 purchaseInformation.getRequestQuantity(), purchaseAmount);
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }
