@@ -27,7 +27,6 @@ public class ConvenienceStoreController {
         this.convenienceStoreService = convenienceStoreService;
     }
 
-
     public void run() {
         ConvenienceStore convenienceStore = initializeConvenienceStore();
         while (true) {

@@ -31,7 +31,6 @@ public class Product {
         return name;
     }
 
-
     public int getPrice() {
         return price;
     }
