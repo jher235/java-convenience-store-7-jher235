@@ -44,23 +44,25 @@ public class InitializerFromFile {
 
     private List<Promotion> parsePromotionsFrom(BufferedReader bufferedReader) throws IOException {
         List<Promotion> promotions = new LinkedList<>();
-
         while (true) {
             String line = bufferedReader.readLine();
             if (line == null) {
                 break;
             }
-
-            String[] rowData = line.split(DELIMITER);
-            String name = rowData[0];
-            int buy = Integer.parseInt(rowData[1]);
-            int get = Integer.parseInt(rowData[2]);
-            LocalDate startDate = LocalDate.parse(rowData[3]);
-            LocalDate endDate = LocalDate.parse(rowData[4]);
-
-            promotions.add(new Promotion(name, buy, get, startDate, endDate));
+            registerPromotion(promotions, line);
         }
         return promotions;
+    }
+
+    private void registerPromotion(List<Promotion> promotions, String line){
+        String[] rowData = line.split(DELIMITER);
+        String name = rowData[0];
+        int buy = Integer.parseInt(rowData[1]);
+        int get = Integer.parseInt(rowData[2]);
+        LocalDate startDate = LocalDate.parse(rowData[3]);
+        LocalDate endDate = LocalDate.parse(rowData[4]);
+
+        promotions.add(new Promotion(name, buy, get, startDate, endDate));
     }
 
     private void validateColumn(List<String> column, List<String> parsedColumn) {
@@ -72,33 +74,39 @@ public class InitializerFromFile {
 
     private AllProducts parseAllProductsFrom(BufferedReader bufferedReader, List<Promotion> promotions) throws IOException {
         List<Product> products = new LinkedList<>();
-//        List<PromotionProduct> promotionProducts = new LinkedList<>();
-
         while (true) {
             String line = bufferedReader.readLine();
             if (line == null) {
                 break;
             }
-
-            String[] rowData = line.split(DELIMITER);
-            String name = rowData[0];
-            int price = Integer.parseInt(rowData[1]);
-            int quantity = Integer.parseInt(rowData[2]);
-            String promotionName = rowData[3];
-
-            if (promotionName.equals(NA_VALUE)) {
-                products.add(Product.from(name, price, quantity));
-                continue;
-            }
-
-            Promotion promotion = findPromotionByPromotionName(promotionName, promotions);
-//            promotionProducts.add(PromotionProduct.from(name, price, quantity, promotion));
-            products.add(Product.from(name, price, quantity, promotion));
+           addProduct(products, line, promotions);
         }
-
-        AllProducts allProducts = new AllProducts(products);
-        return allProducts;
+        return new AllProducts(products);
     }
+
+    private void addProduct(List<Product> products, String line, List<Promotion> promotions){
+        String[] rowData = line.split(DELIMITER);
+        String name = rowData[0];
+        int price = Integer.parseInt(rowData[1]);
+        int quantity = Integer.parseInt(rowData[2]);
+        String promotionName = rowData[3];
+        if (promotionName.equals(NA_VALUE)) {
+            addBasicProduct(products, name, price, quantity);
+            return;
+        }
+        addPromotionProduct(products, name, price, quantity, promotionName, promotions);
+    }
+
+    private void addBasicProduct(List<Product> products, String name, int price, int quantity){
+        products.add(Product.from(name, price, quantity));
+    }
+
+    private void addPromotionProduct(List<Product> products, String name, int price,
+                                     int quantity, String promotionName, List<Promotion> promotions){
+        Promotion promotion = findPromotionByPromotionName(promotionName, promotions);
+        products.add(Product.from(name, price, quantity, promotion));
+    }
+
 
     private Promotion findPromotionByPromotionName(String promotionName, List<Promotion> promotions) {
         Optional<Promotion> promotion = promotions.stream()
