@@ -13,7 +13,7 @@ public class PurchaseResult {
     private int membershipDiscountAmount;
     private int excludePromotionAmount;
 
-    public PurchaseResult(){
+    public PurchaseResult() {
         purchaseResponses = new LinkedList<>();
         promotionItems = new LinkedHashMap<>();
         totalAmount = 0;
@@ -23,35 +23,37 @@ public class PurchaseResult {
         excludePromotionAmount = 0;
     }
 
-    public void setMembershipDiscountAmount(int membershipDiscountAmount){
+    public void setMembershipDiscountAmount(int membershipDiscountAmount) {
         this.membershipDiscountAmount = membershipDiscountAmount;
     }
 
-    public void addTotalAmount(int amount){
+    public void addTotalAmount(int amount) {
         this.totalAmount += amount;
     }
 
-    public void addTotalQuantity(int quantity){
+    public void addTotalQuantity(int quantity) {
         this.totalProductQuantity += quantity;
     }
 
-    public void addEventDiscountAmount(int eventDiscountAmount){
+    public void addEventDiscountAmount(int eventDiscountAmount) {
         this.eventDiscountAmount += eventDiscountAmount;
     }
-    public void addExcludePromotionAmount(int excludePromotionAmount){
+
+    public void addExcludePromotionAmount(int excludePromotionAmount) {
         this.excludePromotionAmount += excludePromotionAmount;
     }
 
-    public void addPurchaseResponses(PurchaseResponse purchaseResponse){
+    public void addPurchaseResponses(PurchaseResponse purchaseResponse) {
         this.purchaseResponses.add(purchaseResponse);
     }
-    public void addPromotionItems(String name, int quantity){
-        if(!promotionItems.containsKey(name)){
+
+    public void addPromotionItems(String name, int quantity) {
+        if (!promotionItems.containsKey(name)) {
             this.promotionItems.put(name, quantity);
             return;
         }
         int preQuantity = this.promotionItems.get(name);
-        this.promotionItems.put(name, preQuantity+quantity);
+        this.promotionItems.put(name, preQuantity + quantity);
     }
 
     public List<PurchaseResponse> getPurchaseResponses() {

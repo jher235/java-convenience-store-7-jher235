@@ -1,10 +1,10 @@
 package store;
 
+import camp.nextstep.edu.missionutils.Console;
 import store.controller.ConvenienceStoreController;
 import store.service.ConvenienceStoreService;
 import store.view.InputView;
 import store.view.OutputView;
-
 
 
 public class Application {
@@ -13,13 +13,9 @@ public class Application {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
         ConvenienceStoreService convenienceStoreService = new ConvenienceStoreService();
-
         ConvenienceStoreController controller = new ConvenienceStoreController(
-                inputView,
-                outputView,
-                convenienceStoreService
-        );
-
+                inputView, outputView, convenienceStoreService);
         controller.run();
+        Console.close();
     }
 }

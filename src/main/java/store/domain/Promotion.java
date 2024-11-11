@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
 
-public record Promotion(String name, int buy, int get, LocalDate startDate, LocalDate endDate){
+public record Promotion(String name, int buy, int get, LocalDate startDate, LocalDate endDate) {
 
-    public boolean isPromotionPeriod(){
+    public boolean isPromotionPeriod() {
         return !startDate.isAfter(ChronoLocalDate.from(DateTimes.now())) &&
                 !endDate.isBefore(ChronoLocalDate.from(DateTimes.now()));
     }

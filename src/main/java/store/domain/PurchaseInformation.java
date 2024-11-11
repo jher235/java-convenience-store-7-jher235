@@ -79,8 +79,8 @@ public class PurchaseInformation {
         this.promotion = Optional.empty();
     }
 
-    private Product createFromPromotionProduct(){
-        if(this.promotionProduct.isEmpty()){
+    private Product createFromPromotionProduct() {
+        if (this.promotionProduct.isEmpty()) {
             ExceptionHandler.inputException(NOT_FOUND_PRODUCT);
         }
         Product product = promotionProduct.get();

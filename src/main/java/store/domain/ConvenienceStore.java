@@ -25,17 +25,17 @@ public class ConvenienceStore {
         initializePromotion();
     }
 
-    public ProductStock getStock(){
+    public ProductStock getStock() {
         List<Product> stock = products;
         AllProducts allProducts = new AllProducts(stock);
         return ProductStock.from(allProducts);
     }
 
-    public List<Product> findProductsByName(String productName){
+    public List<Product> findProductsByName(String productName) {
         List<Product> productList = products.stream()
                 .filter(product -> productName.equals(product.getName()))
                 .toList();
-        if(productList.isEmpty()){
+        if (productList.isEmpty()) {
             ExceptionHandler.inputException(ErrorMessage.NOT_FOUND_PRODUCT);
         }
         return productList;

@@ -24,16 +24,14 @@ public class InputView {
             List<String> purchaseInformationList = Arrays.stream(input.split(DELIMITER))
                     .map(String::trim)
                     .toList();
-
             Pattern pattern = Pattern.compile(PURCHASE_PATTERN);
             return parsePurchaseRequest(purchaseInformationList, pattern);
-
         } catch (IllegalArgumentException e) {
             return purchase();
         }
     }
 
-    public boolean readYesOrNo(){
+    public boolean readYesOrNo() {
         while (true) {
             try {
                 String input = readLine();

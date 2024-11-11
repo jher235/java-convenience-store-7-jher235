@@ -11,9 +11,9 @@ public class ReceiptConstant {
     public static final String RECEIPT_PROMOTION_ITEM = "%-17s%-11d\n";
     public static final String RECEIPT_LINE = "====================================\n";
     public static final String TOTAL_PURCHASE_AMOUNT = stringFormatWithSpace("총구매액",17) + "%-11d%s\n";
-    public static final String EVENT_DISCOUNT = stringFormatWithSpace("행사할인", 28) + "%s\n";
-    public static final String MEMBERSHIP_DISCOUNT = stringFormatWithSpace("멤버십할인", 28) + "%s\n";
-    public static final String PAYMENT_AMOUNT = stringFormatWithSpace("내실돈", 28) + "%s\n";
+    public static final String EVENT_DISCOUNT = stringFormatWithSpace("행사할인", 28) + "-%s\n";
+    public static final String MEMBERSHIP_DISCOUNT = stringFormatWithSpace("멤버십할인", 27) + "-%s\n";
+    public static final String PAYMENT_AMOUNT = stringFormatWithSpace("내실돈", 29) + "%s\n";
 
     public static String stringFormatWithSpace(String string, int length) {
         return String.format("%-" + length + "s", string);

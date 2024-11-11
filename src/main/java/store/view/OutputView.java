@@ -21,7 +21,6 @@ public class OutputView {
     private final String ASKING_CONTINUE_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
 
 
-
     public void showStock(ProductStock productStock) {
         StringBuilder stringBuilder = new StringBuilder(START_MESSAGE);
         productStock.getProductResponses().stream()
@@ -31,25 +30,25 @@ public class OutputView {
         System.out.println(stringBuilder);
     }
 
-    public void printAskingMembership(){
+    public void printAskingMembership() {
         System.out.println(ASKING_MEMBERSHIP_APPLY);
     }
 
-    public void printPurchaseStartMessage(){
+    public void printPurchaseStartMessage() {
         System.out.println(PURCHASE_MESSAGE);
     }
 
-    public void printAvailablePromotionBonus(String productName){
+    public void printAvailablePromotionBonus(String productName) {
         String message = String.format(AVAILABLE_PROMOTION_BONUS, productName);
         System.out.println(message);
     }
 
-    public void printUnExpectedPromotion(String productName, int quantity){
+    public void printUnExpectedPromotion(String productName, int quantity) {
         String message = String.format(UNEXPECTED_PROMOTION_MESSAGE, productName, quantity);
         System.out.println(message);
     }
 
-    public void printReceipt(PurchaseResult purchaseResult){
+    public void printReceipt(PurchaseResult purchaseResult) {
         StringBuilder stringBuilder = new StringBuilder(RECEIPT_CONVENIENCE_NAME);
         appendPurchasedProduct(purchaseResult, stringBuilder);
         appendPromotionItem(purchaseResult, stringBuilder);
@@ -57,11 +56,11 @@ public class OutputView {
         System.out.println(stringBuilder);
     }
 
-    public void printContinueMessage(){
+    public void printContinueMessage() {
         System.out.println(ASKING_CONTINUE_MESSAGE);
     }
 
-    private void appendResult(PurchaseResult purchaseResult, StringBuilder stringBuilder){
+    private void appendResult(PurchaseResult purchaseResult, StringBuilder stringBuilder) {
         int totalAmount = purchaseResult.getTotalAmount();
         int eventDiscountAmount = purchaseResult.getEventDiscountAmount();
         int membershipDiscountAmount = purchaseResult.getMembershipDiscountAmount();
@@ -74,27 +73,27 @@ public class OutputView {
     }
 
 
-    private void appendPromotionItem(PurchaseResult purchaseResult, StringBuilder stringBuilder){
+    private void appendPromotionItem(PurchaseResult purchaseResult, StringBuilder stringBuilder) {
         stringBuilder.append(RECEIPT_PROMOTION_ITEM_MESSAGE);
         Map<String, Integer> promotionItems = purchaseResult.getPromotionItems();
         promotionItems.forEach((name, quantity) ->
                 stringBuilder.append(formatPromotionItem(name, quantity)));
     }
 
-    private String formatPromotionItem(String name, int quantity){
+    private String formatPromotionItem(String name, int quantity) {
         return String.format(RECEIPT_PROMOTION_ITEM,
                 name,
                 quantity);
     }
 
-    private void appendPurchasedProduct(PurchaseResult purchaseResult, StringBuilder stringBuilder){
+    private void appendPurchasedProduct(PurchaseResult purchaseResult, StringBuilder stringBuilder) {
         stringBuilder.append(RECEIPT_COLUMN_NAME);
         purchaseResult.getPurchaseResponses().stream()
                 .map(this::formatProductResponse)
                 .forEach(stringBuilder::append);
     }
 
-    private String formatProductResponse(PurchaseResponse purchaseResponse){
+    private String formatProductResponse(PurchaseResponse purchaseResponse) {
         return String.format(RECEIPT_PRODUCT_FORMAT,
                 purchaseResponse.getProductName(),
                 purchaseResponse.getQuantity(),

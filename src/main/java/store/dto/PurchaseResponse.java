@@ -8,13 +8,13 @@ public class PurchaseResponse {
     private int quantity;
     private int amount;
 
-    private PurchaseResponse(String productName, int quantity, int amount){
+    private PurchaseResponse(String productName, int quantity, int amount) {
         this.productName = productName;
         this.quantity = quantity;
         this.amount = amount;
     }
 
-    public static PurchaseResponse from(PurchaseInformation purchaseInformation){
+    public static PurchaseResponse from(PurchaseInformation purchaseInformation) {
         Product product = purchaseInformation.getProduct();
         int purchaseAmount = purchaseInformation.getRequestQuantity() * product.getPrice();
         return new PurchaseResponse(purchaseInformation.getProductName(),
