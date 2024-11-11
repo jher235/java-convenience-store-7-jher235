@@ -31,19 +31,25 @@ public class ConvenienceStoreController {
     public void run(){
         ConvenienceStore convenienceStore = initializeConvenienceStore();
         while (true){
-            ProductStock stock = convenienceStore.getStock();
-            outputView.showStock(stock);
+            outputView.showStock(convenienceStore.getStock());
             List<PurchaseInformation> purchaseInformations = getPurchaseInformation(convenienceStore);
             PurchaseResult purchaseResult = purchase(convenienceStore, purchaseInformations);
             outputView.printReceipt(purchaseResult);
+            if(!isContinue()){
+                break;
+            }
         }
-
     }
 
     public PurchaseResult purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations){
         purchaseInformations = purchaseConfirmed(purchaseInformations);
         boolean membershipApplied = isMembershipApplied();
         return convenienceStoreService.purchase(convenienceStore, purchaseInformations, membershipApplied);
+    }
+
+    private boolean isContinue(){
+        outputView.printContinueMessage();
+        return inputView.readYesOrNo();
     }
 
     private boolean isMembershipApplied(){
