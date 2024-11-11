@@ -174,7 +174,18 @@ public class ConvenienceStoreService {
                                                                 int buy,
                                                                 int get) {
         int promotionSet = buy + get;
-        if (requestQuantity <= promotionQuantity && requestQuantity % (promotionSet) == 0) {
+        if (requestQuantity <= promotionQuantity) {
+            return promotionStockIsEnough(promotionQuantity, requestQuantity, promotionSet);
+        }
+        int requiredPromotionSet = promotionQuantity / (promotionSet);
+        int purchasePromotionProduct = requiredPromotionSet * (promotionSet);
+        return PromotionAvailableResponse.unavailableResponse(requestQuantity - purchasePromotionProduct);
+    }
+
+    private PromotionAvailableResponse promotionStockIsEnough(int promotionQuantity,
+                                                              int requestQuantity, int promotionSet) {
+
+        if (requestQuantity % (promotionSet) == 0) {
             return PromotionAvailableResponse.availableResponse();
         }
         int requiredPromotionSet = requestQuantity / (promotionSet);
