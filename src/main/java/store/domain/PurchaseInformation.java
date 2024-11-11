@@ -1,9 +1,12 @@
 package store.domain;
 
 import store.dto.PurchaseRequest;
+import store.exception.ExceptionHandler;
 
 import java.util.List;
 import java.util.Optional;
+
+import static store.exception.ErrorMessage.NOT_FOUND_PRODUCT;
 
 public class PurchaseInformation {
     private Product product;
@@ -19,7 +22,7 @@ public class PurchaseInformation {
         product = products.stream()
                 .filter(product -> !product.isPromotionProduct())
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElse(createFromPromotionProduct());
         productName = purchaseRequest.getProductName();
         requestQuantity = purchaseRequest.getQuantity();
         initializePromotion();
@@ -74,6 +77,16 @@ public class PurchaseInformation {
             return;
         }
         this.promotion = Optional.empty();
+    }
+
+    private Product createFromPromotionProduct(){
+        if(this.promotionProduct.isEmpty()){
+            ExceptionHandler.inputException(NOT_FOUND_PRODUCT);
+        }
+        Product product = promotionProduct.get();
+        return Product.from(product.getName(),
+                product.getPrice(),
+                0);
     }
 
 }

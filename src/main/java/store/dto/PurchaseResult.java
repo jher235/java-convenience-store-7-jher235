@@ -24,7 +24,7 @@ public class PurchaseResult {
     }
 
     public void setMembershipDiscountAmount(int membershipDiscountAmount){
-        this.membershipDiscountAmount = - membershipDiscountAmount;
+        this.membershipDiscountAmount = membershipDiscountAmount;
     }
 
     public void addTotalAmount(int amount){
@@ -36,7 +36,7 @@ public class PurchaseResult {
     }
 
     public void addEventDiscountAmount(int eventDiscountAmount){
-        this.eventDiscountAmount -= eventDiscountAmount;
+        this.eventDiscountAmount += eventDiscountAmount;
     }
     public void addExcludePromotionAmount(int excludePromotionAmount){
         this.excludePromotionAmount += excludePromotionAmount;
