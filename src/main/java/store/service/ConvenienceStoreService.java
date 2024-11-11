@@ -27,15 +27,6 @@ public class ConvenienceStoreService {
         return purchaseResult;
     }
 
-    public boolean isPossiblePurchase(final PurchaseRequest purchaseRequest, ConvenienceStore convenienceStore) {
-        List<Product> products = convenienceStore.findProductsByName(purchaseRequest.getProductName());
-
-        int productCount = products.stream()
-                .mapToInt(Product::getQuantity)
-                .sum();
-        return productCount >= purchaseRequest.getQuantity();
-    }
-
     public PurchaseInformation mapPurchaseInformation(final PurchaseRequest purchaseRequest, ConvenienceStore convenienceStore) {
         List<Product> products = convenienceStore.findProductsByName(purchaseRequest.getProductName());
         validRequestAmount(products, purchaseRequest);
@@ -109,7 +100,6 @@ public class ConvenienceStoreService {
 
     private void purchaseWithPromotion(Promotion promotion, Product promotionProduct, PurchaseInformation purchaseInformation,
                                        Product product, int requestQuantity, PurchaseResult purchaseResult) {
-
         int promotionQuantity = promotionProduct.getQuantity();
         int productPrice = product.getPrice();
         int purchasePrice = productPrice * requestQuantity;
