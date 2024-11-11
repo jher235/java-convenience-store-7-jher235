@@ -22,7 +22,7 @@ public class PurchaseInformation {
         product = products.stream()
                 .filter(product -> !product.isPromotionProduct())
                 .findFirst()
-                .orElse(createFromPromotionProduct());
+                .orElseGet(this::createFromPromotionProduct);
         productName = purchaseRequest.getProductName();
         requestQuantity = purchaseRequest.getQuantity();
         initializePromotion();
