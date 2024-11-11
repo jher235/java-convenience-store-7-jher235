@@ -12,15 +12,15 @@ public class Product {
     private int quantity;
     private Optional<Promotion> promotion;
 
-    public static Product from(String name, int price, int quantity){
+    public static Product from(String name, int price, int quantity) {
         return new Product(name, price, quantity, Optional.empty());
     }
 
-    public static Product from(String name, int price, int quantity, Promotion promotion){
+    public static Product from(String name, int price, int quantity, Promotion promotion) {
         return new Product(name, price, quantity, Optional.of(promotion));
     }
 
-    protected Product(String name, int price, int quantity, Optional<Promotion> promotion){
+    protected Product(String name, int price, int quantity, Optional<Promotion> promotion) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -44,19 +44,19 @@ public class Product {
         return this.promotion;
     }
 
-    public boolean isPromotionProduct(){
+    public boolean isPromotionProduct() {
         return this.promotion.isPresent();
     }
 
-    public void subtractQuantity(int quantity){
-        if(this.quantity >= quantity){
+    public void subtractQuantity(int quantity) {
+        if (this.quantity >= quantity) {
             this.quantity -= quantity;
             return;
         }
         ExceptionHandler.inputException(ErrorMessage.OUT_OF_STOCK);
     }
 
-    public int popAllQuantity(){
+    public int popAllQuantity() {
         int productQuantity = this.quantity;
         this.quantity = 0;
         return productQuantity;

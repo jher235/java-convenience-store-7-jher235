@@ -28,49 +28,61 @@ public class ConvenienceStoreController {
     }
 
 
-    public void run(){
+    public void run() {
         ConvenienceStore convenienceStore = initializeConvenienceStore();
-        while (true){
+        while (true) {
             outputView.showStock(convenienceStore.getStock());
             List<PurchaseInformation> purchaseInformations = getPurchaseInformation(convenienceStore);
             PurchaseResult purchaseResult = purchase(convenienceStore, purchaseInformations);
-            outputView.printReceipt(purchaseResult);
-            if(!isContinue()){
+            if (!displayResultAndAskContinue(purchaseResult)) {
                 break;
             }
         }
     }
 
-    public PurchaseResult purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations){
+    private boolean displayResultAndAskContinue(PurchaseResult purchaseResult) {
+        printResult(purchaseResult);
+        return isContinue();
+    }
+
+    private void printResult(PurchaseResult purchaseResult) {
+        if (!purchaseResult.getPurchaseResponses().isEmpty()) {
+            outputView.printReceipt(purchaseResult);
+        }
+    }
+
+    public PurchaseResult purchase(ConvenienceStore convenienceStore, List<PurchaseInformation> purchaseInformations) {
         purchaseInformations = purchaseConfirmed(purchaseInformations);
+        if (purchaseInformations.isEmpty()) {
+            return new PurchaseResult();
+        }
         boolean membershipApplied = isMembershipApplied();
         return convenienceStoreService.purchase(convenienceStore, purchaseInformations, membershipApplied);
     }
 
-    private boolean isContinue(){
+    private boolean isContinue() {
         outputView.printContinueMessage();
         return inputView.readYesOrNo();
     }
 
-    private boolean isMembershipApplied(){
+    private boolean isMembershipApplied() {
         outputView.printAskingMembership();
         return inputView.readYesOrNo();
     }
 
-    private List<PurchaseInformation> getPurchaseInformation(ConvenienceStore convenienceStore){
+    private List<PurchaseInformation> getPurchaseInformation(ConvenienceStore convenienceStore) {
         outputView.printPurchaseStartMessage();
-        while (true){
+        while (true) {
             try {
                 List<PurchaseRequest> purchaseRequests = inputView.purchase();
                 return purchaseRequests.stream()
                         .map(purchaseRequest -> mapPurchaseInformation(purchaseRequest, convenienceStore)).toList();
-            }catch (IllegalArgumentException ignored){
+            } catch (IllegalArgumentException ignored) {
             }
         }
     }
 
-
-    private ConvenienceStore initializeConvenienceStore(){
+    private ConvenienceStore initializeConvenienceStore() {
         try {
             return new ConvenienceStore();
         } catch (IOException e) {
@@ -78,11 +90,11 @@ public class ConvenienceStoreController {
         }
     }
 
-    private PurchaseInformation mapPurchaseInformation(PurchaseRequest purchaseRequest, ConvenienceStore convenienceStore){
+    private PurchaseInformation mapPurchaseInformation(PurchaseRequest purchaseRequest, ConvenienceStore convenienceStore) {
         return convenienceStoreService.mapPurchaseInformation(purchaseRequest, convenienceStore);
     }
 
-    private List<PurchaseInformation> purchaseConfirmed(List<PurchaseInformation> purchaseInformations){
+    private List<PurchaseInformation> purchaseConfirmed(List<PurchaseInformation> purchaseInformations) {
         purchaseInformations.forEach(this::announcePromotion);
         purchaseInformations.forEach(this::checkPromotionApply);
         return purchaseInformations.stream()
@@ -93,22 +105,22 @@ public class ConvenienceStoreController {
     /**
      * ConvenienceStoreService 가 View 에 의존성을 갖지 않도록 하기 위해 Controller 에서 처리.
      */
-    private void checkPromotionApply (PurchaseInformation purchaseInformation){
+    private void checkPromotionApply(PurchaseInformation purchaseInformation) {
         PromotionAvailableResponse response = convenienceStoreService.isPromotionAvailable(purchaseInformation);
-        if(!response.isAvailable()){
+        if (!response.isAvailable()) {
             int retailPriceProduct = response.getUnavailablePromotionCount();
             outputView.printUnExpectedPromotion(purchaseInformation.getProductName(), response.getUnavailablePromotionCount());
-            if(inputView.readYesOrNo()){
-                return ;
+            if (inputView.readYesOrNo()) {
+                return;
             }
             purchaseInformation.subtractRetailPriceProduct(retailPriceProduct);
         }
     }
 
-    private void announcePromotion(PurchaseInformation purchaseInformation){
-        if(convenienceStoreService.isAppendPromotionBonus(purchaseInformation)){
+    private void announcePromotion(PurchaseInformation purchaseInformation) {
+        if (convenienceStoreService.isAppendPromotionBonus(purchaseInformation)) {
             outputView.printAvailablePromotionBonus(purchaseInformation.getProductName());
-            if(inputView.readYesOrNo()){
+            if (inputView.readYesOrNo()) {
                 purchaseInformation.increaseQuantity();
             }
         }
